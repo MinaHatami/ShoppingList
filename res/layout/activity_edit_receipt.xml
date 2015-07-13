@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+ <EditText
+        android:id="@+id/etNewStoreName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="@string/storeName"
+        android:inputType="textPersonName" >
+    </EditText>
+
+    <TextView
+        android:id="@+id/tvNewPurchaseDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:ems="10"
+        android:enabled="false"
+        android:hint="@string/purchaseDate" />
+
+    <Button
+        android:id="@+id/btNewDatePicker"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="40dp"
+        android:onClick="newDatePickerClick"
+        android:text="@string/datePicker" />
+
+    <ImageView
+        android:id="@+id/newReceiptImage"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/ic_launcher"
+        android:contentDescription="@string/imagePicker" />
+
+    <Button
+        android:id="@+id/btNewImagePicker"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:onClick="newImagePickerClick"
+        android:text="@string/imagePicker" />
+
+    <EditText
+        android:id="@+id/etNewReceiptAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:ems="10"
+        android:hint="@string/receiptAmount"
+        android:inputType="textPostalAddress" >
+    </EditText>
+
+    <Button
+        android:id="@+id/btEditReceipt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:onClick="editReceiptClick"
+        android:text="@string/editReceipt" />
+    
+</LinearLayout>
