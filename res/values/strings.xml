@@ -17,6 +17,7 @@
     <string name="chooseMonth">Choose A Month</string>
      
     <string-array name="months_array">
+        <item >Search by Month</item>
         <item >January</item>
         <item >February</item>
         <item >March</item>

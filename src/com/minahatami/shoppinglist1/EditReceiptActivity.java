@@ -1,6 +1,8 @@
 package com.minahatami.shoppinglist1;
 
 
+import java.io.File;
+
 import com.minahatami.shoppinglist1.R;
 
 import android.app.Activity;
@@ -27,9 +29,8 @@ public class EditReceiptActivity extends Activity{
 
 	EditText  etNewStoreName, etNewReceiptAmount;
 	TextView tvNewPurchaseDate;
-	String newStoreName, newPurchaseDate, newReceiptAmount, newImage;
 	ImageView newImageView;
-	private String imagePath;
+	private String path;
 	
 	static final int DATE_DIALOG_ID = 999;
 
@@ -46,6 +47,26 @@ public class EditReceiptActivity extends Activity{
 		etNewReceiptAmount = (EditText) findViewById(R.id.etNewReceiptAmount);
 		tvNewPurchaseDate = (TextView) findViewById(R.id.tvNewPurchaseDate);
 		newImageView = (ImageView) findViewById(R.id.newReceiptImage);
+		
+		String storeName = this.getIntent().getStringExtra("storeName");
+		String receiptAmount = this.getIntent().getStringExtra("receiptAmount");
+		String purchaseDate = this.getIntent().getStringExtra("purchaseDate");
+		path = this.getIntent().getStringExtra("path");
+		
+		etNewStoreName.setText(storeName);
+		etNewReceiptAmount.setText(receiptAmount.substring(1));
+		tvNewPurchaseDate.setText(purchaseDate);
+		
+		File imgFile = new File(path);
+
+		if (imgFile.exists()) {
+
+			Bitmap myBitmap = BitmapFactory.decodeFile(imgFile
+					.getAbsolutePath());
+
+			newImageView.setImageBitmap(myBitmap);
+
+		}
 	}
 
 	public void newDatePickerClick(View view){
@@ -102,7 +123,7 @@ public class EditReceiptActivity extends Activity{
 			cursor.moveToFirst();
 
 			int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-			imagePath = cursor.getString(columnIndex);
+			path = cursor.getString(columnIndex);
 			cursor.close();
 
 			// here you can call createImageThumbnail method passing
@@ -113,7 +134,7 @@ public class EditReceiptActivity extends Activity{
 			// 480, 800));
 			// imageView.setImageBitmap(BitmapFactory.decodeFile(imagePath));
 
-			Bitmap bitmap = BitmapFactory.decodeFile(imagePath,
+			Bitmap bitmap = BitmapFactory.decodeFile(path,
 					new BitmapFactory.Options());
 			newImageView.setImageBitmap(bitmap);
 		}
@@ -142,21 +163,22 @@ public class EditReceiptActivity extends Activity{
 	}*/
 
 	public void editReceiptClick(View view) {
-		newStoreName = etNewStoreName.getEditableText().toString();
-		newReceiptAmount = etNewReceiptAmount.getEditableText().toString();
-		newPurchaseDate = tvNewPurchaseDate.getText().toString();
+		String newStoreName = etNewStoreName.getEditableText().toString().toUpperCase();
+		String newReceiptAmount = "$" + etNewReceiptAmount.getEditableText().toString();
+		String newPurchaseDate = tvNewPurchaseDate.getText().toString();
 
 		int memberID = getIntent().getExtras().getInt("memberID");
 		Log.d("MainActivity", "memberID is : " + memberID);
 
 		SQLController db = new SQLController(this);
 		db.open();
-		if (db.updateData(memberID, newStoreName, newReceiptAmount, newPurchaseDate,imagePath) > 0) {
+		if (db.updateData(memberID, newStoreName, newReceiptAmount, newPurchaseDate,path) > 0) {
 			Toast.makeText(this, "Successfully Edited!", Toast.LENGTH_SHORT)
 					.show();
 		} else {
 			Toast.makeText(this, "Unsuccessful!", Toast.LENGTH_SHORT).show();
 		}
+		db.updateData(memberID, newStoreName, newReceiptAmount, newPurchaseDate, path);
 		db.close();
 	}
 

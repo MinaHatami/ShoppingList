@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="@drawable/shopping_cart1" >
     
  <EditText
         android:id="@+id/etNewStoreName"
@@ -32,6 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="40dp"
+        android:background="@drawable/oval_background"
         android:onClick="newDatePickerClick"
         android:text="@string/datePicker" />
 
@@ -51,6 +53,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="20dp"
+        android:background="@drawable/oval_background"
         android:onClick="newImagePickerClick"
         android:text="@string/imagePicker" />
 
@@ -62,7 +65,7 @@
         android:layout_marginBottom="20dp"
         android:ems="10"
         android:hint="@string/receiptAmount"
-        android:inputType="textPostalAddress" >
+        android:inputType="numberDecimal" >
     </EditText>
 
     <Button
@@ -71,6 +74,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="20dp"
+        android:background="@drawable/oval_background"
         android:onClick="editReceiptClick"
         android:text="@string/editReceipt" />
     

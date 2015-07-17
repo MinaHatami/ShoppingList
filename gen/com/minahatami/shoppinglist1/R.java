@@ -25,49 +25,56 @@ public final class R {
         public static final int activity_vertical_margin=0x7f040001;
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
+        public static final int black=0x7f020000;
+        public static final int ic_launcher=0x7f020001;
+        public static final int oval_background=0x7f020002;
+        public static final int shopping_cart1=0x7f020003;
     }
     public static final class id {
-        public static final int action_settings=0x7f09001d;
-        public static final int btAddReceipt=0x7f090014;
+        public static final int action_settings=0x7f090022;
+        public static final int btAddReceipt=0x7f090017;
+        public static final int btCalculate=0x7f090014;
         public static final int btDatePicker=0x7f090002;
         public static final int btEditReceipt=0x7f09000d;
         public static final int btImagePicker=0x7f090004;
         public static final int btNewDatePicker=0x7f090009;
         public static final int btNewImagePicker=0x7f09000b;
-        public static final int btSearchReceipt=0x7f090015;
+        public static final int btSearchReceipt=0x7f090018;
         public static final int btaddReceiptToList=0x7f090006;
-        public static final int delete=0x7f09001c;
-        public static final int dropDownSpinner=0x7f090013;
-        public static final int edit=0x7f09001a;
+        public static final int delete=0x7f09001f;
+        public static final int edit=0x7f09001d;
         public static final int etNewReceiptAmount=0x7f09000c;
         public static final int etNewStoreName=0x7f090007;
         public static final int etReceiptAmount=0x7f090005;
         public static final int etSearchStore=0x7f090012;
         public static final int etStoreName=0x7f090000;
         public static final int imageViewAddReceipt=0x7f090003;
-        public static final int imgViewReceipt=0x7f090018;
-        public static final int listView=0x7f090016;
+        public static final int imgViewReceipt=0x7f09001a;
+        public static final int listView=0x7f090019;
         public static final int newReceiptImage=0x7f09000a;
+        public static final int no=0x7f090021;
+        public static final int spinner=0x7f090013;
         public static final int tvNewPurchaseDate=0x7f090008;
         public static final int tvPurchaseDate=0x7f090001;
-        public static final int tvReceiptAmount=0x7f090019;
-        public static final int tvStoreName=0x7f090017;
-        public static final int view=0x7f09001b;
+        public static final int tvReceiptAmount=0x7f09001c;
+        public static final int tvResult=0x7f090015;
+        public static final int tvResultDollar=0x7f090016;
+        public static final int tvStoreName=0x7f09001b;
+        public static final int view=0x7f09001e;
         public static final int viewPurchaseDate=0x7f09000f;
         public static final int viewReceiptAmount=0x7f090010;
         public static final int viewReceiptImage=0x7f090011;
         public static final int viewStoreName=0x7f09000e;
+        public static final int yes=0x7f090020;
     }
     public static final class layout {
         public static final int activity_add_receipt=0x7f030000;
         public static final int activity_edit_receipt=0x7f030001;
-        public static final int activity_main=0x7f030002;
-        public static final int activity_receipt_view=0x7f030003;
-        public static final int activity_search_receipt=0x7f030004;
-        public static final int activity_shopping_list=0x7f030005;
-        public static final int activity_shopping_list_item=0x7f030006;
-        public static final int activity_spinner_item=0x7f030007;
+        public static final int activity_receipt_view=0x7f030002;
+        public static final int activity_search_receipt=0x7f030003;
+        public static final int activity_shopping_list=0x7f030004;
+        public static final int activity_shopping_list_item=0x7f030005;
+        public static final int activity_spinner_item=0x7f030006;
     }
     public static final class menu {
         public static final int context_menu=0x7f080000;
@@ -93,11 +100,13 @@ public final class R {
         /** 
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+
     
 
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
             backward-compatibility can go here.
+
         
 
         Base application theme for API 11+. This theme completely replaces
@@ -116,5 +125,7 @@ public final class R {
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f070001;
+        public static final int Buttons=0x7f070003;
+        public static final int CodeFont=0x7f070002;
     }
 }

@@ -20,7 +20,7 @@ public class MyArrayAdapter extends ArrayAdapter<Receipt> {
 	private static final String TAG = "MyArrayAdapter";
 	private Context mContext;
 	private List<Receipt> receipts;
-	private final int THUMBSIZE = 50;
+	private final int THUMBSIZE = 120;
 
 	public MyArrayAdapter(Context context, List<Receipt> receipts) {
 		super(context, R.layout.activity_shopping_list_item, receipts);

@@ -74,6 +74,7 @@ public class MainActivity extends Activity {
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
+		
 		Log.d("Menu", "Menu");
 		menu.setHeaderTitle("Choose Action!");
 		MenuInflater inflater = getMenuInflater();
@@ -91,13 +92,8 @@ public class MainActivity extends Activity {
 
 			Intent i = new Intent(this, ReceiptViewActivity.class);
 			// ???? Revise this
-			i.putExtra("storeName", adapter.getItem(info.position)
-					.getStoreName());
-			i.putExtra("purchaseDate", adapter.getItem(info.position)
-					.getPurchaseDate());
-			i.putExtra("path", adapter.getItem(info.position).getImage());
-			i.putExtra("receiptAmount", adapter.getItem(info.position)
-					.getReceiptAmount());
+			transferData(i, info);
+			
 			startActivity(i);
 
 			return true;
@@ -106,7 +102,7 @@ public class MainActivity extends Activity {
 			Log.d("getItemID", "edit");
 
 			Intent intent = new Intent(this, EditReceiptActivity.class);
-			intent.putExtra("memberID", adapter.getItem(info.position).getId());
+			transferData(intent, info);
 			startActivity(intent);
 
 			// ?????? Update adapter after update SQLite----->
@@ -119,6 +115,8 @@ public class MainActivity extends Activity {
 			Log.d("getItemID", "delete");
 
 			int customerId = adapter.getItem(info.position).getId();
+			
+			
 			sqlController.deleteData(customerId);
 			// sqlController.close();
 
@@ -133,11 +131,26 @@ public class MainActivity extends Activity {
 
 	}
 
+	private void transferData(Intent i, AdapterContextMenuInfo info) {
+		i.putExtra("memberID", adapter.getItem(info.position).getId());
+		i.putExtra("storeName", adapter.getItem(info.position)
+				.getStoreName());
+		i.putExtra("purchaseDate", adapter.getItem(info.position)
+				.getPurchaseDate());
+		i.putExtra("path", adapter.getItem(info.position).getImage());
+		i.putExtra("receiptAmount", adapter.getItem(info.position)
+				.getReceiptAmount());
+		
+	}
+
 	public void addReceiptClick(View view) {
 		Intent i = new Intent(this, AddNewReceipt.class);
 		startActivity(i);
 	}
-
+	public void searchReceiptClick(View view) {
+		Intent i = new Intent(this, SearchReceiptActivity.class);
+		startActivity(i);
+	}
 	
 
 	

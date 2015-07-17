@@ -88,7 +88,8 @@ public final class SQLController {
 
 	public int updateData(long memberID, String storeName, String receiptAmount, String purchaseDate, String imagePath) {
 		ContentValues cvUpdate = new ContentValues();
-
+		
+		//TODO:
 		cvUpdate.put(DBHelper.COLUMN_STORENAME, storeName);
 		cvUpdate.put(DBHelper.COLUMN_RECEIPTAMOUNT, receiptAmount);
 		cvUpdate.put(DBHelper.COLUMN_PURCHASEDATE, purchaseDate);

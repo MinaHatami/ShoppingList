@@ -1,20 +1,18 @@
 package com.minahatami.shoppinglist1;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.minahatami.shoppinglist1.R;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -29,12 +27,11 @@ import android.widget.Toast;
 public class AddNewReceipt extends Activity{
 	private final int SELECT_PHOTO = 1;
 	private String storeName, receiptAmount, purchaseDate, imagePath;
-	private final String pathName = "CustomerPictures";
 	private ImageView imageViewAddReceipt;
-	String filePath;
-	//String imgPath;
 	private EditText etStoreName, etReceiptAmount;
 	private TextView tvPurchaseDate;
+	final String pathName = "My Receipts";
+	private final String TAG = "onActivityResult";
 
 	static final int DATE_DIALOG_ID = 999;
 
@@ -54,14 +51,42 @@ public class AddNewReceipt extends Activity{
 	}
 
 	public void imagePickerClick(View view) {
-			Intent intent = new Intent(Intent.ACTION_PICK);
-			intent.setType("image/*");
+			/*Intent intent = new Intent(Intent.ACTION_PICK);
+			intent.setType("image/*");*/
+			Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			startActivityForResult(intent, SELECT_PHOTO);
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == SELECT_PHOTO && resultCode == RESULT_OK && data != null) {
+		if (requestCode == SELECT_PHOTO && resultCode == RESULT_OK) {
+			Bundle extras = data.getExtras();
+			Bitmap imageBitmap = (Bitmap) extras.get("data");
+			imageViewAddReceipt.setImageBitmap(imageBitmap);
+			// save it in your external storage.
+			try {
+
+				imagePath = saveImage(imageBitmap);
+				Bitmap bitmap = BitmapFactory.decodeFile(imagePath, new BitmapFactory.Options());
+				//imageViewAddReceipt.setImageBitmap(bitmap);
+				// create new picitem
+				// myPics.add(new Pic(imgPath, imgPath));
+
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		} else {
+			Toast.makeText(getApplicationContext(),
+					"Something went wrong! Please try again.",
+					Toast.LENGTH_LONG).show();
+		}
+		
+		
+		
+		
+		/*	if (requestCode == SELECT_PHOTO && resultCode == RESULT_OK && data != null) {
 			super.onActivityResult(requestCode, resultCode, data);
 			
 			Uri selectedImage = data.getData();  
@@ -81,9 +106,22 @@ public class AddNewReceipt extends Activity{
 	            // imageView.setImageBitmap(BitmapFactory.decodeFile(imagePath));
 	            
 Bitmap bitmap = BitmapFactory.decodeFile(imagePath, new BitmapFactory.Options());
-imageViewAddReceipt.setImageBitmap(bitmap);  
-		}
+imageViewAddReceipt.setImageBitmap(bitmap); 
+		}*/ 
 		
+	}
+	
+	private String saveImage(Bitmap imageBitmap) throws Exception {
+		String imageFileName = generateNewImageFileName() + ".jpg";
+		Log.v(TAG, "imageFileName: " + imageFileName);
+		File file = new File(getRootDirectoy(), pathName + "/" + imageFileName);
+		file.createNewFile();
+		FileOutputStream fo = new FileOutputStream(file);
+		imageBitmap.compress(Bitmap.CompressFormat.PNG, 85, fo);
+		fo.flush();
+		fo.close();
+
+		return file.getAbsolutePath();
 	}
 
 	/*Bitmap createImageThumbnail(String imagePath, int width, int height) {
@@ -153,23 +191,20 @@ imageViewAddReceipt.setImageBitmap(bitmap);
 		}
 	};
 
-	// when this button is clicked, data will be saved and a new customer will
+	//TODO: 
+	//when this button is clicked, data will be saved and a new receipt will
 	// be created.
 	public void addReceiptToListClick(View view) throws SQLException {
-		storeName = etStoreName.getEditableText().toString();
+		storeName = etStoreName.getEditableText().toString().toUpperCase();
 		purchaseDate = tvPurchaseDate.getText().toString();
-		receiptAmount = etReceiptAmount.getEditableText().toString();
+		receiptAmount = "$" + etReceiptAmount.getEditableText().toString();
 
-		SQLController customersDB = new SQLController(this);
-		customersDB.open();
-		if(customersDB.verification(storeName, purchaseDate) == true ){
-			Log.d("Verification", "Duplicate");
-			Toast.makeText(this, "Duplicate Entry!", Toast.LENGTH_LONG).show();
-		}
-		else{
-		customersDB.insertData(storeName, purchaseDate, receiptAmount, imagePath);
+		SQLController receiptsDB = new SQLController(this);
+		receiptsDB.open();
+		
+		receiptsDB.insertData(storeName, purchaseDate, receiptAmount, imagePath);
 		Toast.makeText(this, "Succesfully Added To The List!", Toast.LENGTH_LONG).show();
-		customersDB.close();
-		}
+		receiptsDB.close();
+		
 	}
 }
