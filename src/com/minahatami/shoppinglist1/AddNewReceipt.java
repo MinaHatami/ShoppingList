@@ -51,8 +51,6 @@ public class AddNewReceipt extends Activity{
 	}
 
 	public void imagePickerClick(View view) {
-			/*Intent intent = new Intent(Intent.ACTION_PICK);
-			intent.setType("image/*");*/
 			Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			startActivityForResult(intent, SELECT_PHOTO);
 	}
@@ -61,16 +59,15 @@ public class AddNewReceipt extends Activity{
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == SELECT_PHOTO && resultCode == RESULT_OK) {
 			Bundle extras = data.getExtras();
+			
 			Bitmap imageBitmap = (Bitmap) extras.get("data");
-			imageViewAddReceipt.setImageBitmap(imageBitmap);
+			Bitmap resizedBitmap = imageBitmap.createScaledBitmap(imageBitmap, 50, 50, false);
+			imageViewAddReceipt.setImageBitmap(resizedBitmap);
+			
 			// save it in your external storage.
 			try {
 
 				imagePath = saveImage(imageBitmap);
-				Bitmap bitmap = BitmapFactory.decodeFile(imagePath, new BitmapFactory.Options());
-				//imageViewAddReceipt.setImageBitmap(bitmap);
-				// create new picitem
-				// myPics.add(new Pic(imgPath, imgPath));
 
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -82,49 +79,33 @@ public class AddNewReceipt extends Activity{
 					"Something went wrong! Please try again.",
 					Toast.LENGTH_LONG).show();
 		}
-		
-		
-		
-		
-		/*	if (requestCode == SELECT_PHOTO && resultCode == RESULT_OK && data != null) {
-			super.onActivityResult(requestCode, resultCode, data);
-			
-			Uri selectedImage = data.getData();  
-	            String[] filePathColumn = { MediaStore.Images.Media.DATA };  
-
-	            Cursor cursor = getContentResolver().query(selectedImage,  
-	                    filePathColumn, null, null, null);  
-	            cursor.moveToFirst();  
-
-	            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);  
-	            imagePath = cursor.getString(columnIndex);  
-	            cursor.close();
-
-	            //here you can call createImageThumbnail method passing (picturePath,480,800) 
-	            //and set the received bitmap imageview directly instead of storing in bitmap.
-	            // eg. imageView.setImageBitmap(createImageThumbnail( picturePath, 480, 800));
-	            // imageView.setImageBitmap(BitmapFactory.decodeFile(imagePath));
-	            
-Bitmap bitmap = BitmapFactory.decodeFile(imagePath, new BitmapFactory.Options());
-imageViewAddReceipt.setImageBitmap(bitmap); 
-		}*/ 
+		 
 		
 	}
 	
 	private String saveImage(Bitmap imageBitmap) throws Exception {
 		String imageFileName = generateNewImageFileName() + ".jpg";
+		
 		Log.v(TAG, "imageFileName: " + imageFileName);
-		File file = new File(getRootDirectoy(), pathName + "/" + imageFileName);
+		
+		File file = new File(getRootDirectoy(), pathName);
+		if (!file.exists()) {
+			file.mkdir();
+        }
+		file = new File(file.getAbsolutePath(), imageFileName);
+		 
 		file.createNewFile();
 		FileOutputStream fo = new FileOutputStream(file);
 		imageBitmap.compress(Bitmap.CompressFormat.PNG, 85, fo);
 		fo.flush();
 		fo.close();
-
+		
+		Log.v(TAG, "file.getAbsolutePath(): " + file.getAbsolutePath());
+		
 		return file.getAbsolutePath();
 	}
 
-	/*Bitmap createImageThumbnail(String imagePath, int width, int height) {
+	Bitmap createImageThumbnail(String imagePath, int width, int height) {
 		Bitmap bitmap = null;
 		  BitmapFactory.Options bmpFactoryOptions = new BitmapFactory.Options();  
 		  bmpFactoryOptions.inJustDecodeBounds = true;  
@@ -145,7 +126,7 @@ imageViewAddReceipt.setImageBitmap(bitmap);
 		  bitmap = BitmapFactory.decodeFile(imagePath, bmpFactoryOptions);  
 		  return bitmap;  
 		 } 
- */
+ 
 
 	private File getRootDirectoy() {
 		// TODO Auto-generated method stub
@@ -201,6 +182,8 @@ imageViewAddReceipt.setImageBitmap(bitmap);
 
 		SQLController receiptsDB = new SQLController(this);
 		receiptsDB.open();
+		
+		Log.v(TAG, "imagePath: " + imagePath);
 		
 		receiptsDB.insertData(storeName, purchaseDate, receiptAmount, imagePath);
 		Toast.makeText(this, "Succesfully Added To The List!", Toast.LENGTH_LONG).show();

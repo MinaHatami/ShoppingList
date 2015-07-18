@@ -1,6 +1,5 @@
 package com.minahatami.shoppinglist1;
 
-
 import java.io.File;
 
 import com.minahatami.shoppinglist1.R;
@@ -23,15 +22,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class EditReceiptActivity extends Activity{
+public class EditReceiptActivity extends Activity {
 
 	private final int SELECT_PHOTO = 1;
 
-	EditText  etNewStoreName, etNewReceiptAmount;
+	EditText etNewStoreName, etNewReceiptAmount;
 	TextView tvNewPurchaseDate;
 	ImageView newImageView;
 	private String path;
-	
+
 	static final int DATE_DIALOG_ID = 999;
 
 	private int year;
@@ -47,29 +46,30 @@ public class EditReceiptActivity extends Activity{
 		etNewReceiptAmount = (EditText) findViewById(R.id.etNewReceiptAmount);
 		tvNewPurchaseDate = (TextView) findViewById(R.id.tvNewPurchaseDate);
 		newImageView = (ImageView) findViewById(R.id.newReceiptImage);
-		
+
 		String storeName = this.getIntent().getStringExtra("storeName");
 		String receiptAmount = this.getIntent().getStringExtra("receiptAmount");
 		String purchaseDate = this.getIntent().getStringExtra("purchaseDate");
 		path = this.getIntent().getStringExtra("path");
-		
+
 		etNewStoreName.setText(storeName);
 		etNewReceiptAmount.setText(receiptAmount.substring(1));
 		tvNewPurchaseDate.setText(purchaseDate);
-		
-		File imgFile = new File(path);
 
-		if (imgFile.exists()) {
+		if (path != null) {
+			File imgFile = new File(path);
 
-			Bitmap myBitmap = BitmapFactory.decodeFile(imgFile
-					.getAbsolutePath());
+			if (imgFile.exists()) {
 
-			newImageView.setImageBitmap(myBitmap);
+				Bitmap myBitmap = BitmapFactory.decodeFile(imgFile
+						.getAbsolutePath());
 
+				newImageView.setImageBitmap(myBitmap);
+			}
 		}
 	}
 
-	public void newDatePickerClick(View view){
+	public void newDatePickerClick(View view) {
 		showDialog(DATE_DIALOG_ID);
 	}
 
@@ -103,6 +103,7 @@ public class EditReceiptActivity extends Activity{
 
 		}
 	};
+
 	public void newImagePickerClick(View view) {
 		Intent intent = new Intent(Intent.ACTION_PICK);
 		intent.setType("image/*");
@@ -139,32 +140,29 @@ public class EditReceiptActivity extends Activity{
 			newImageView.setImageBitmap(bitmap);
 		}
 	}
-/*
-	Bitmap createImageThumbnail(String imagePath, int width, int height) {
-		Bitmap bitmap = null;
-		BitmapFactory.Options bmpFactoryOptions = new BitmapFactory.Options();
-		bmpFactoryOptions.inJustDecodeBounds = true;
-		int heightRatio = (int) Math.ceil(bmpFactoryOptions.outHeight
-				/ (float) height);
-		int widthRatio = (int) Math.ceil(bmpFactoryOptions.outWidth
-				/ (float) width);
 
-		if (heightRatio > 1 || widthRatio > 1) {
-			if (heightRatio > widthRatio) {
-				bmpFactoryOptions.inSampleSize = heightRatio;
-			} else {
-				bmpFactoryOptions.inSampleSize = widthRatio;
-			}
-		}
-		bmpFactoryOptions.inJustDecodeBounds = false;
-
-		bitmap = BitmapFactory.decodeFile(imagePath, bmpFactoryOptions);
-		return bitmap;
-	}*/
+	/*
+	 * Bitmap createImageThumbnail(String imagePath, int width, int height) {
+	 * Bitmap bitmap = null; BitmapFactory.Options bmpFactoryOptions = new
+	 * BitmapFactory.Options(); bmpFactoryOptions.inJustDecodeBounds = true; int
+	 * heightRatio = (int) Math.ceil(bmpFactoryOptions.outHeight / (float)
+	 * height); int widthRatio = (int) Math.ceil(bmpFactoryOptions.outWidth /
+	 * (float) width);
+	 * 
+	 * if (heightRatio > 1 || widthRatio > 1) { if (heightRatio > widthRatio) {
+	 * bmpFactoryOptions.inSampleSize = heightRatio; } else {
+	 * bmpFactoryOptions.inSampleSize = widthRatio; } }
+	 * bmpFactoryOptions.inJustDecodeBounds = false;
+	 * 
+	 * bitmap = BitmapFactory.decodeFile(imagePath, bmpFactoryOptions); return
+	 * bitmap; }
+	 */
 
 	public void editReceiptClick(View view) {
-		String newStoreName = etNewStoreName.getEditableText().toString().toUpperCase();
-		String newReceiptAmount = "$" + etNewReceiptAmount.getEditableText().toString();
+		String newStoreName = etNewStoreName.getEditableText().toString()
+				.toUpperCase();
+		String newReceiptAmount = "$"
+				+ etNewReceiptAmount.getEditableText().toString();
 		String newPurchaseDate = tvNewPurchaseDate.getText().toString();
 
 		int memberID = getIntent().getExtras().getInt("memberID");
@@ -172,13 +170,15 @@ public class EditReceiptActivity extends Activity{
 
 		SQLController db = new SQLController(this);
 		db.open();
-		if (db.updateData(memberID, newStoreName, newReceiptAmount, newPurchaseDate,path) > 0) {
+		if (db.updateData(memberID, newStoreName, newReceiptAmount,
+				newPurchaseDate, path) > 0) {
 			Toast.makeText(this, "Successfully Edited!", Toast.LENGTH_SHORT)
 					.show();
 		} else {
 			Toast.makeText(this, "Unsuccessful!", Toast.LENGTH_SHORT).show();
 		}
-		db.updateData(memberID, newStoreName, newReceiptAmount, newPurchaseDate, path);
+		db.updateData(memberID, newStoreName, newReceiptAmount,
+				newPurchaseDate, path);
 		db.close();
 	}
 

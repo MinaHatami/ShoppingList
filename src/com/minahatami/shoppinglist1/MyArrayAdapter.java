@@ -9,6 +9,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,26 +59,26 @@ public class MyArrayAdapter extends ArrayAdapter<Receipt> {
 			viewHolder = (ViewHolder) view.getTag();
 		}
 
-		Receipt currentCustomer = receipts.get(position);
+		Receipt currentReceipts = receipts.get(position);
 
 		/*
 		 * Log.v(TAG, "view is null: " + (view == null)); Log.v(TAG,
 		 * "tvName is null: " + (view.findViewById(R.id.tvName) == null));
 		 */
 
-		viewHolder.storeName.setText(currentCustomer.getStoreName());
-		viewHolder.purchaseDate.setText(currentCustomer.getPurchaseDate());
-		viewHolder.receiptAmount.setText(currentCustomer.getReceiptAmount());
+		viewHolder.storeName.setText(currentReceipts.getStoreName());
+		viewHolder.purchaseDate.setText(currentReceipts.getPurchaseDate());
+		viewHolder.receiptAmount.setText(currentReceipts.getReceiptAmount());
 		
 		// Log.v(TAG, "getName: " + currentCustomer.getName());
 		// Log.v(TAG, "getDateOfBirth: " + currentCustomer.getDateOfBirth());
 		// Log.v(TAG, "getImage: " + currentCustomer.getImage());
 
 		Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(
-				getBitmap(currentCustomer.getImage()), THUMBSIZE, THUMBSIZE);
+				getBitmap(currentReceipts.getImage()), THUMBSIZE, THUMBSIZE);
 		viewHolder.imgViewReceipt.setImageBitmap(ThumbImage);
 		// setPic( , viewHolder.image);
-
+		Log.v(TAG, "currentCustomer.getImage(): " + currentReceipts.getImage());
 		return view;
 	}
 	

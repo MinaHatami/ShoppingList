@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +21,8 @@ import android.widget.ListView;
 
 public class MainActivity extends Activity {
 
+	private static final String TAG = "MainActivity";
+	
 	ListView receiptList;
 	private List<Receipt> receipts;
 	ArrayAdapter<Receipt> adapter;
@@ -33,9 +34,9 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_shopping_list);
 
 		sqlController = new SQLController(this);
-		receipts = sqlController.getCustomers();
+		//receipts = sqlController.getReceipts();
 		receiptList = (ListView) findViewById(R.id.listView);
-		adapter = new MyArrayAdapter(this, receipts);
+		//adapter = new MyArrayAdapter(this, receipts);
 
 		// When clicked on an item view
 		receiptList.setOnItemClickListener(new OnItemClickListener() {
@@ -66,10 +67,18 @@ public class MainActivity extends Activity {
 			}
 		});
 
-		receiptList.setAdapter(adapter);
+		//receiptList.setAdapter(adapter);
 		registerForContextMenu(receiptList);
 	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		receipts = sqlController.getReceipts();
+		adapter = new MyArrayAdapter(this, receipts);
+		receiptList.setAdapter(adapter);
+	}
+	
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
@@ -107,7 +116,7 @@ public class MainActivity extends Activity {
 
 			// ?????? Update adapter after update SQLite----->
 			// onContentChanged()
-			adapter.notifyDataSetChanged();
+			//adapter.notifyDataSetChanged();
 
 			return true;
 
@@ -140,6 +149,8 @@ public class MainActivity extends Activity {
 		i.putExtra("path", adapter.getItem(info.position).getImage());
 		i.putExtra("receiptAmount", adapter.getItem(info.position)
 				.getReceiptAmount());
+		
+		Log.v(TAG, "path: "+ adapter.getItem(info.position).getImage());
 		
 	}
 

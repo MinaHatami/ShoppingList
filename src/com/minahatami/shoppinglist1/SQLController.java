@@ -48,7 +48,7 @@ public final class SQLController {
 
 	}
 
-	public List<Receipt> getCustomers() {
+	public List<Receipt> getReceipts() {
 		List<Receipt> receipts = new ArrayList<Receipt>();
 
 		Cursor cursor = readData();
