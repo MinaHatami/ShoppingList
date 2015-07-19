@@ -1,6 +1,7 @@
 package com.minahatami.shoppinglist1;
 
 import java.io.File;
+import java.util.Calendar;
 
 import com.minahatami.shoppinglist1.R;
 
@@ -48,14 +49,15 @@ public class EditReceiptActivity extends Activity {
 		newImageView = (ImageView) findViewById(R.id.newReceiptImage);
 
 		String storeName = this.getIntent().getStringExtra("storeName");
-		String receiptAmount = this.getIntent().getStringExtra("receiptAmount");
+		int receiptAmount = this.getIntent().getIntExtra("receiptAmount", 0);
 		String purchaseDate = this.getIntent().getStringExtra("purchaseDate");
 		path = this.getIntent().getStringExtra("path");
 
+		
 		etNewStoreName.setText(storeName);
-		etNewReceiptAmount.setText(receiptAmount.substring(1));
+		etNewReceiptAmount.setText("" + ((double)receiptAmount / 100));
 		tvNewPurchaseDate.setText(purchaseDate);
-
+		
 		if (path != null) {
 			File imgFile = new File(path);
 
@@ -67,6 +69,12 @@ public class EditReceiptActivity extends Activity {
 				newImageView.setImageBitmap(myBitmap);
 			}
 		}
+		
+		final Calendar c = Calendar.getInstance();
+	    year = c.get(Calendar.YEAR);
+	    month = c.get(Calendar.MONTH);
+	    day = c.get(Calendar.DAY_OF_MONTH);
+
 	}
 
 	public void newDatePickerClick(View view) {
@@ -161,8 +169,7 @@ public class EditReceiptActivity extends Activity {
 	public void editReceiptClick(View view) {
 		String newStoreName = etNewStoreName.getEditableText().toString()
 				.toUpperCase();
-		String newReceiptAmount = "$"
-				+ etNewReceiptAmount.getEditableText().toString();
+		int newReceiptAmount = (int) (Double.parseDouble(etNewReceiptAmount.getEditableText().toString()) * 100);
 		String newPurchaseDate = tvNewPurchaseDate.getText().toString();
 
 		int memberID = getIntent().getExtras().getInt("memberID");

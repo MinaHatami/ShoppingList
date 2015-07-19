@@ -34,8 +34,8 @@ public final class SQLController {
 		dbHelper.close();
 	}
 
-	public void insertData(String storeName, String purchaseDate, String receiptAmount,
-			String imagePath) {
+	public void insertData(String storeName, String purchaseDate,
+			int receiptAmount, String imagePath) {
 		// TODO Auto-generated method stub
 		ContentValues cv = new ContentValues();
 
@@ -55,7 +55,7 @@ public final class SQLController {
 		if (cursor != null && cursor.getCount() > 0) {
 			while (cursor.moveToNext()) {
 				Receipt c = new Receipt(cursor.getInt(0), cursor.getString(1),
-						cursor.getString(2), cursor.getString(3),
+						cursor.getString(2), cursor.getInt(3),
 						cursor.getString(4));
 
 				receipts.add(c);
@@ -86,10 +86,11 @@ public final class SQLController {
 		return c;
 	}
 
-	public int updateData(long memberID, String storeName, String receiptAmount, String purchaseDate, String imagePath) {
+	public int updateData(long memberID, String storeName,
+			int receiptAmount, String purchaseDate, String imagePath) {
 		ContentValues cvUpdate = new ContentValues();
-		
-		//TODO:
+
+		// TODO:
 		cvUpdate.put(DBHelper.COLUMN_STORENAME, storeName);
 		cvUpdate.put(DBHelper.COLUMN_RECEIPTAMOUNT, receiptAmount);
 		cvUpdate.put(DBHelper.COLUMN_PURCHASEDATE, purchaseDate);
@@ -117,6 +118,44 @@ public final class SQLController {
 				count = c.getInt(0);
 			}
 			return count > 0;
+		} finally {
+			if (c != null) {
+				c.close();
+			}
+		}
+	}
+
+	public double calculate(String storeName, int month) {
+		Cursor c = null;
+		double amount = 0;
+		try {
+
+			String query = "SELECT SUM(" + DBHelper.COLUMN_RECEIPTAMOUNT
+					+ ") FROM " + DBHelper.TABLE_Receipts + " WHERE "
+					+ DBHelper.COLUMN_STORENAME + " like '%" + storeName + "%' AND "
+					+ DBHelper.COLUMN_PURCHASEDATE + " like '%" + month + "%'";
+			
+			/*
+			 * + "AND strftime('%m', " + DBHelper.COLUMN_PURCHASEDATE + ") = ?";
+			 */
+
+			/*c = database.query(DBHelper.TABLE_Receipts, new String[] { "SUM("
+					+ DBHelper.COLUMN_RECEIPTAMOUNT + ")" }, " like %'"
+					+ storeName + "'%", new String[] {}, null, null, null);*/
+			
+//			c = database.query(DBHelper.TABLE_Receipts, new String[] { "SUM("
+//					+ DBHelper.COLUMN_RECEIPTAMOUNT + ")" }, DBHelper.COLUMN_STORENAME + " LIKE '?'",
+//					new String[] { storeName + "%" }, null, null, null);
+			 c = database.rawQuery(query, null);
+			// .rawQuery(query, new String[] { storeName, "" + month });
+
+			if (c != null && c.moveToFirst()) {
+				amount = c.getDouble(0);
+			}
+			Log.v(TAG, "amount: " + amount);
+			Log.v(TAG, "storeName: " + storeName);
+
+			return amount;
 		} finally {
 			if (c != null) {
 				c.close();

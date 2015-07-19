@@ -1,8 +1,9 @@
 package com.minahatami.shoppinglist1;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
-
-import com.minahatami.shoppinglist1.R;
 
 import android.app.Activity;
 import android.content.Context;
@@ -22,6 +23,7 @@ public class MyArrayAdapter extends ArrayAdapter<Receipt> {
 	private Context mContext;
 	private List<Receipt> receipts;
 	private final int THUMBSIZE = 120;
+	private final SimpleDateFormat form = new SimpleDateFormat("MM-dd-yyyy");
 
 	public MyArrayAdapter(Context context, List<Receipt> receipts) {
 		super(context, R.layout.activity_shopping_list_item, receipts);
@@ -65,10 +67,23 @@ public class MyArrayAdapter extends ArrayAdapter<Receipt> {
 		 * Log.v(TAG, "view is null: " + (view == null)); Log.v(TAG,
 		 * "tvName is null: " + (view.findViewById(R.id.tvName) == null));
 		 */
+		
+		java.util.Date date = null;
+		try 
+		{
+		    date = form.parse(currentReceipts.getPurchaseDate());
+		}
+		catch (ParseException e) 
+		{
 
+		    e.printStackTrace();
+		}
+		SimpleDateFormat postFormater = new SimpleDateFormat("dd MMM, yyyy");
+		String newDateStr = postFormater.format(date);
+		viewHolder.purchaseDate.setText(newDateStr);
+				
 		viewHolder.storeName.setText(currentReceipts.getStoreName());
-		viewHolder.purchaseDate.setText(currentReceipts.getPurchaseDate());
-		viewHolder.receiptAmount.setText(currentReceipts.getReceiptAmount());
+		viewHolder.receiptAmount.setText("$" + ((double)currentReceipts.getReceiptAmount() / 100));
 		
 		// Log.v(TAG, "getName: " + currentCustomer.getName());
 		// Log.v(TAG, "getDateOfBirth: " + currentCustomer.getDateOfBirth());
@@ -78,7 +93,7 @@ public class MyArrayAdapter extends ArrayAdapter<Receipt> {
 				getBitmap(currentReceipts.getImage()), THUMBSIZE, THUMBSIZE);
 		viewHolder.imgViewReceipt.setImageBitmap(ThumbImage);
 		// setPic( , viewHolder.image);
-		Log.v(TAG, "currentCustomer.getImage(): " + currentReceipts.getImage());
+		Log.v(TAG, "currentReceipts.getImage(): " + currentReceipts.getImage());
 		return view;
 	}
 	
@@ -115,7 +130,7 @@ public class MyArrayAdapter extends ArrayAdapter<Receipt> {
 	}
 
 	private static class ViewHolder {
-		TextView storeName, purchaseDate, receiptAmount, imagePath;
+		TextView storeName, purchaseDate, receiptAmount;
 		ImageView imgViewReceipt;
 	}
 }

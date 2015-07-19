@@ -47,7 +47,15 @@ public class MainActivity extends Activity {
 
 				Intent intent = new Intent(parent.getContext(),
 						ReceiptViewActivity.class);
-				// putExtra adds extended data to theintent.
+				intent.putExtra("memberID", adapter.getItem(position).getId());
+				intent.putExtra("storeName", adapter.getItem(position)
+						.getStoreName());
+				intent.putExtra("purchaseDate", adapter.getItem(position)
+						.getPurchaseDate());
+				intent.putExtra("path", adapter.getItem(position).getImage());
+				intent.putExtra("receiptAmount", adapter.getItem(position)
+						.getReceiptAmount());
+				// putExtra adds extended data to the intent.
 				// "path" is a key which will be used by PictureViewActivity
 				// class to get the path of the file
 				// intent.putExtra("path",receipts.get(position).getImage());

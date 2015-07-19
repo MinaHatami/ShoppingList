@@ -9,7 +9,7 @@
     <string name="purchaseDate">Purchase Date</string>
     <string name="datePicker">Pick Purchase date</string>
     <string name="imagePicker">Take Photo of Receit</string>
-    <string name="receiptAmount">Receipt Amount</string>
+    <string name="receiptAmount">Receipt Amount (CAD)</string>
     <string name="addReceiptToList">Add To My Shopping List</string>
     <string name="editReceipt">Edit Receipt</string>
     <string name="viewReceipt">View Receipt</string>

@@ -15,7 +15,7 @@ public class DBHelper extends SQLiteOpenHelper{
 
 		//Database Information
 		 static final String DATABASE_NAME = "ReceiptList";
-		 static final int DATABASE_VERSION = 2;
+		 static final int DATABASE_VERSION = 3;
 
 		public DBHelper(Context context) {
 			super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -28,7 +28,7 @@ public class DBHelper extends SQLiteOpenHelper{
 			db.execSQL("CREATE TABLE " + TABLE_Receipts + " (" + COLUMN_ENTRY_ID
 					+ " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_STORENAME
 					+ " TEXT NOT NULL, " + COLUMN_PURCHASEDATE + " TEXT, "
-					+ COLUMN_RECEIPTAMOUNT + " TEXT, " + COLUMN_IMAGE
+					+ COLUMN_RECEIPTAMOUNT + " INTEGER, " + COLUMN_IMAGE
 					+ " TEXT)");
 
 		}

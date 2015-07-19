@@ -1,10 +1,10 @@
 package com.minahatami.shoppinglist1;
 
 public class Receipt {
-	private int id;
-	private String storeName, purchaseDate, receiptAmount, image;
-
-	public Receipt(int id, String storeName, String purchaseDate, String receiptAmount,
+	private int id, receiptAmount;
+	private String storeName, purchaseDate, image;
+	
+	public Receipt(int id, String storeName, String purchaseDate, int receiptAmount,
 			String image) {
 		super();
 
@@ -27,7 +27,7 @@ public class Receipt {
 		return purchaseDate;
 	}
 
-	public String getReceiptAmount() {
+	public int getReceiptAmount() {
 		return receiptAmount;
 	}
 
