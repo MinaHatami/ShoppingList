@@ -61,39 +61,33 @@ public class MyArrayAdapter extends ArrayAdapter<Receipt> {
 			viewHolder = (ViewHolder) view.getTag();
 		}
 
-		Receipt currentReceipts = receipts.get(position);
+		Receipt receipt = receipts.get(position);
 
-		/*
-		 * Log.v(TAG, "view is null: " + (view == null)); Log.v(TAG,
-		 * "tvName is null: " + (view.findViewById(R.id.tvName) == null));
-		 */
-		
-		java.util.Date date = null;
+		String newDateStr = receipt.getPurchaseDate();
 		try 
 		{
-		    date = form.parse(currentReceipts.getPurchaseDate());
+			//Log.v(TAG, "getPurchaseDate: " + receipt.getPurchaseDate());
+			
+			if(newDateStr != null && !newDateStr.isEmpty()){
+				java.util.Date date = form.parse(newDateStr);
+				SimpleDateFormat postFormater = new SimpleDateFormat("dd MMM, yyyy");
+				newDateStr = postFormater.format(date);
+			}
 		}
-		catch (ParseException e) 
-		{
-
+		catch (ParseException e){
 		    e.printStackTrace();
 		}
-		SimpleDateFormat postFormater = new SimpleDateFormat("dd MMM, yyyy");
-		String newDateStr = postFormater.format(date);
+		
 		viewHolder.purchaseDate.setText(newDateStr);
 				
-		viewHolder.storeName.setText(currentReceipts.getStoreName());
-		viewHolder.receiptAmount.setText("$" + ((double)currentReceipts.getReceiptAmount() / 100));
+		viewHolder.storeName.setText(receipt.getStoreName());
+		viewHolder.receiptAmount.setText("$" + ((double)receipt.getReceiptAmount() / 100));
 		
-		// Log.v(TAG, "getName: " + currentCustomer.getName());
-		// Log.v(TAG, "getDateOfBirth: " + currentCustomer.getDateOfBirth());
-		// Log.v(TAG, "getImage: " + currentCustomer.getImage());
-
 		Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(
-				getBitmap(currentReceipts.getImage()), THUMBSIZE, THUMBSIZE);
+				getBitmap(receipt.getImage()), THUMBSIZE, THUMBSIZE);
 		viewHolder.imgViewReceipt.setImageBitmap(ThumbImage);
 		// setPic( , viewHolder.image);
-		Log.v(TAG, "currentReceipts.getImage(): " + currentReceipts.getImage());
+		Log.v(TAG, "currentReceipts.getImage(): " + receipt.getImage());
 		return view;
 	}
 	

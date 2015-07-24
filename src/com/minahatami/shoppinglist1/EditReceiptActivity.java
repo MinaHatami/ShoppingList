@@ -48,16 +48,13 @@ public class EditReceiptActivity extends Activity {
 		tvNewPurchaseDate = (TextView) findViewById(R.id.tvNewPurchaseDate);
 		newImageView = (ImageView) findViewById(R.id.newReceiptImage);
 
-		String storeName = this.getIntent().getStringExtra("storeName");
-		int receiptAmount = this.getIntent().getIntExtra("receiptAmount", 0);
-		String purchaseDate = this.getIntent().getStringExtra("purchaseDate");
-		path = this.getIntent().getStringExtra("path");
-
+		Receipt receipt = (Receipt) this.getIntent().getSerializableExtra(MainActivity.RECEIPT_KEY);
 		
-		etNewStoreName.setText(storeName);
-		etNewReceiptAmount.setText("" + ((double)receiptAmount / 100));
-		tvNewPurchaseDate.setText(purchaseDate);
-		
+		etNewStoreName.setText(receipt.getStoreName());
+		etNewReceiptAmount.setText("" + ((double)receipt.getReceiptAmount() / 100));
+		tvNewPurchaseDate.setText(receipt.getPurchaseDate());
+		path = receipt.getImage();
+				
 		if (path != null) {
 			File imgFile = new File(path);
 
@@ -105,10 +102,6 @@ public class EditReceiptActivity extends Activity {
 			tvNewPurchaseDate.setText(new StringBuilder().append(month + 1)
 					.append("-").append(day).append("-").append(year)
 					.append(" "));
-
-			// set selected date into datepicker also
-			// dpResult.init(year, month, day, null);
-
 		}
 	};
 
@@ -135,12 +128,9 @@ public class EditReceiptActivity extends Activity {
 			path = cursor.getString(columnIndex);
 			cursor.close();
 
-			// here you can call createImageThumbnail method passing
-			// (picturePath,480,800)
-			// and set the received bitmap imageview directly instead of storing
-			// in bitmap.
-			// eg. imageView.setImageBitmap(createImageThumbnail( picturePath,
-			// 480, 800));
+			// here you can call createImageThumbnail method passing (picturePath,480,800)
+			// and set the received bitmap imageview directly instead of storing in bitmap.
+			// eg. imageView.setImageBitmap(createImageThumbnail( picturePath, 480, 800));
 			// imageView.setImageBitmap(BitmapFactory.decodeFile(imagePath));
 
 			Bitmap bitmap = BitmapFactory.decodeFile(path,
@@ -148,23 +138,6 @@ public class EditReceiptActivity extends Activity {
 			newImageView.setImageBitmap(bitmap);
 		}
 	}
-
-	/*
-	 * Bitmap createImageThumbnail(String imagePath, int width, int height) {
-	 * Bitmap bitmap = null; BitmapFactory.Options bmpFactoryOptions = new
-	 * BitmapFactory.Options(); bmpFactoryOptions.inJustDecodeBounds = true; int
-	 * heightRatio = (int) Math.ceil(bmpFactoryOptions.outHeight / (float)
-	 * height); int widthRatio = (int) Math.ceil(bmpFactoryOptions.outWidth /
-	 * (float) width);
-	 * 
-	 * if (heightRatio > 1 || widthRatio > 1) { if (heightRatio > widthRatio) {
-	 * bmpFactoryOptions.inSampleSize = heightRatio; } else {
-	 * bmpFactoryOptions.inSampleSize = widthRatio; } }
-	 * bmpFactoryOptions.inJustDecodeBounds = false;
-	 * 
-	 * bitmap = BitmapFactory.decodeFile(imagePath, bmpFactoryOptions); return
-	 * bitmap; }
-	 */
 
 	public void editReceiptClick(View view) {
 		String newStoreName = etNewStoreName.getEditableText().toString()

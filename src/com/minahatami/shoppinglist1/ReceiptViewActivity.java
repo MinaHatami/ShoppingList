@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,31 +30,30 @@ public class ReceiptViewActivity extends Activity {
 		viewReceiptAmount = (TextView) findViewById(R.id.viewReceiptAmount);
 		viewReceiptImage = (ImageView) findViewById(R.id.viewReceiptImage);
 
-		// "path" is a key from putExtra() method
-		String storeName = this.getIntent().getStringExtra("storeName");
-		String purchaseDate = this.getIntent().getStringExtra("purchaseDate");
-		int receiptAmount = this.getIntent().getIntExtra("receiptAmount", 0);
-		String path = this.getIntent().getStringExtra("path");
+		// "Receipt" is a key from putExtra() method	
+		Receipt receipt = (Receipt) this.getIntent().getSerializableExtra(MainActivity.RECEIPT_KEY);
 
-		java.util.Date date = null;
+		String newDateStr = receipt.getPurchaseDate();
 		try 
 		{
-		    date = form.parse(purchaseDate);
+			//Log.v(TAG, "getPurchaseDate: " + receipt.getPurchaseDate());
+			
+			if(newDateStr != null && !newDateStr.isEmpty()){
+				java.util.Date date = form.parse(newDateStr);
+				SimpleDateFormat postFormater = new SimpleDateFormat("dd MMM, yyyy");
+				newDateStr = postFormater.format(date);
+			}
 		}
-		catch (ParseException e) 
-		{
-
+		catch (ParseException e){
 		    e.printStackTrace();
 		}
-		SimpleDateFormat postFormater = new SimpleDateFormat("dd MMM, yyyy");
-		String newDateStr = postFormater.format(date);
 		viewPurchaseDate.setText(newDateStr);
 		
-		viewStoreName.setText(storeName);
-		viewReceiptAmount.setText("$" + ((double)receiptAmount / 100));
+		viewStoreName.setText(receipt.getStoreName());
+		viewReceiptAmount.setText("$" + ((double)receipt.getReceiptAmount() / 100));
 
-		if (path != null) {
-			File imgFile = new File(path);
+		if (receipt.getImage() != null) {
+			File imgFile = new File(receipt.getImage());
 
 			if (imgFile.exists()) {
 

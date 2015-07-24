@@ -22,6 +22,7 @@ import android.widget.ListView;
 public class MainActivity extends Activity {
 
 	private static final String TAG = "MainActivity";
+	public static final String RECEIPT_KEY = "Receipt";
 	
 	ListView receiptList;
 	private List<Receipt> receipts;
@@ -47,18 +48,12 @@ public class MainActivity extends Activity {
 
 				Intent intent = new Intent(parent.getContext(),
 						ReceiptViewActivity.class);
-				intent.putExtra("memberID", adapter.getItem(position).getId());
-				intent.putExtra("storeName", adapter.getItem(position)
-						.getStoreName());
-				intent.putExtra("purchaseDate", adapter.getItem(position)
-						.getPurchaseDate());
-				intent.putExtra("path", adapter.getItem(position).getImage());
-				intent.putExtra("receiptAmount", adapter.getItem(position)
-						.getReceiptAmount());
+			
 				// putExtra adds extended data to the intent.
-				// "path" is a key which will be used by PictureViewActivity
-				// class to get the path of the file
-				// intent.putExtra("path",receipts.get(position).getImage());
+				// "Receipt" is a key which will be used by PictureViewActivity
+				// class to get the path of the file				
+				intent.putExtra("Receipt", adapter.getItem(position));
+				
 				startActivity(intent);
 
 			}
@@ -108,8 +103,7 @@ public class MainActivity extends Activity {
 			Log.d("getItemID", "view");
 
 			Intent i = new Intent(this, ReceiptViewActivity.class);
-			// ???? Revise this
-			transferData(i, info);
+			i.putExtra("Receipt", adapter.getItem(info.position));
 			
 			startActivity(i);
 
@@ -119,13 +113,10 @@ public class MainActivity extends Activity {
 			Log.d("getItemID", "edit");
 
 			Intent intent = new Intent(this, EditReceiptActivity.class);
-			transferData(intent, info);
+			intent.putExtra("Receipt", adapter.getItem(info.position));
+			
 			startActivity(intent);
-
-			// ?????? Update adapter after update SQLite----->
-			// onContentChanged()
-			//adapter.notifyDataSetChanged();
-
+			
 			return true;
 
 		case R.id.delete:
@@ -146,20 +137,6 @@ public class MainActivity extends Activity {
 			return super.onContextItemSelected(item);
 		}
 
-	}
-
-	private void transferData(Intent i, AdapterContextMenuInfo info) {
-		i.putExtra("memberID", adapter.getItem(info.position).getId());
-		i.putExtra("storeName", adapter.getItem(info.position)
-				.getStoreName());
-		i.putExtra("purchaseDate", adapter.getItem(info.position)
-				.getPurchaseDate());
-		i.putExtra("path", adapter.getItem(info.position).getImage());
-		i.putExtra("receiptAmount", adapter.getItem(info.position)
-				.getReceiptAmount());
-		
-		Log.v(TAG, "path: "+ adapter.getItem(info.position).getImage());
-		
 	}
 
 	public void addReceiptClick(View view) {

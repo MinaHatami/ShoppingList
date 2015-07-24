@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.util.MonthDisplayHelper;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -26,8 +27,8 @@ import android.widget.Toast;
 
 public class AddNewReceipt extends Activity {
 	private final int SELECT_PHOTO = 1;
-	private String storeName, purchaseDate, imagePath;
-	int receiptAmount;
+	
+	String imagePath;
 	private ImageView imageViewAddReceipt;
 	private EditText etStoreName, etReceiptAmount;
 	private TextView tvPurchaseDate;
@@ -38,6 +39,7 @@ public class AddNewReceipt extends Activity {
 
 	public static final String[] MONTHS = { "Jan", "Feb", "Mar", "Apr", "May",
 			"Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+	
 	private int year;
 	private int month;
 	private int day;
@@ -60,14 +62,6 @@ public class AddNewReceipt extends Activity {
 		// display the current date (this method is below)
 		// updateDisplay();
 	}
-
-	/*
-	 * private void updateDisplay() { tvPurchaseDate.setText( new
-	 * StringBuilder() // Month is 0 based so add 1 .append(month +
-	 * 1).append("-") .append(day).append("-") .append(year).append(" "));
-	 * 
-	 * }
-	 */
 
 	public void imagePickerClick(View view) {
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -124,23 +118,6 @@ public class AddNewReceipt extends Activity {
 		return file.getAbsolutePath();
 	}
 
-	/*
-	 * Bitmap createImageThumbnail(String imagePath, int width, int height) {
-	 * Bitmap bitmap = null; BitmapFactory.Options bmpFactoryOptions = new
-	 * BitmapFactory.Options(); bmpFactoryOptions.inJustDecodeBounds = true; int
-	 * heightRatio = (int) Math.ceil(bmpFactoryOptions.outHeight / (float)
-	 * height); int widthRatio = (int) Math.ceil(bmpFactoryOptions.outWidth /
-	 * (float) width);
-	 * 
-	 * if (heightRatio > 1 || widthRatio > 1) { if (heightRatio > widthRatio) {
-	 * bmpFactoryOptions.inSampleSize = heightRatio; } else {
-	 * bmpFactoryOptions.inSampleSize = widthRatio; } }
-	 * bmpFactoryOptions.inJustDecodeBounds = false;
-	 * 
-	 * bitmap = BitmapFactory.decodeFile(imagePath, bmpFactoryOptions); return
-	 * bitmap; }
-	 */
-
 	private File getRootDirectoy() {
 		// TODO Auto-generated method stub
 		return Environment.getExternalStorageDirectory();
@@ -179,19 +156,15 @@ public class AddNewReceipt extends Activity {
 					.append("-").append(day).append("-").append(year)
 					.append(" "));
 
-			// set selected date into datepicker also
-			// dpResult.init(year, month, day, null);
-
 		}
 	};
 
-	// TODO:
 	// when this button is clicked, data will be saved and a new receipt will
 	// be created.
 	public void addReceiptToListClick(View view) throws SQLException {
-		storeName = etStoreName.getEditableText().toString().toUpperCase();
-		purchaseDate = tvPurchaseDate.getText().toString();
-		receiptAmount = (int) (Double.parseDouble(etReceiptAmount
+		String storeName = etStoreName.getEditableText().toString().toUpperCase();
+		String purchaseDate = tvPurchaseDate.getText().toString();
+		int receiptAmount = (int) (Double.parseDouble(etReceiptAmount
 				.getEditableText().toString()) * 100);
 		Log.v(TAG, "receiptAmount: " + receiptAmount);
 

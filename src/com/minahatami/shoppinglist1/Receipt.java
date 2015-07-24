@@ -1,6 +1,8 @@
 package com.minahatami.shoppinglist1;
 
-public class Receipt {
+import java.io.Serializable;
+
+public class Receipt implements Serializable{
 	private int id, receiptAmount;
 	private String storeName, purchaseDate, image;
 	
